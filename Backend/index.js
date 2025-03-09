@@ -2,17 +2,18 @@ const express = require("express");
 const app = express();
 const path = require("path");
 const mongoose = require("mongoose");
-const session = require("express-session"); 
+const session = require("express-session");
 const { checkemail, checkpassword } = require("./middlewares/logincheck");
 const User = require("./models/user");
 const port = process.env.PORT || 3000;
 
 // Middleware
 app.use(express.json());
-app.use(express.urlencoded({ extended: true })); 
+app.use(express.urlencoded({ extended: true }));
 app.use(
   session({ secret: "your_secret_key", resave: false, saveUninitialized: true })
-); // Add this line
+);
+app.use(express.static(path.join(__dirname, "../Frontend"))); // Ensure this line is present
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "../Frontend/pages"));
 
@@ -30,7 +31,7 @@ app.get("/", (req, res) => {
 });
 
 app.get("/home", (req, res) => {
-  res.render("home");
+  res.render("home"); // Ensure this line is present
 });
 
 app.get("/notes", (req, res) => {
