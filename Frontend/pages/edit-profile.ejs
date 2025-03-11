@@ -1,0 +1,32 @@
+<body>
+    <div class="container">
+      <h2>Edit Profile</h2>
+      <form action="/edit-profile" method="POST" enctype="multipart/form-data">
+        <div>
+          <label for="username">Username:</label>
+          <input type="text" id="username" name="username" value="<%= user.username %>" required />
+        </div>
+        <div>
+          <label for="bio">Bio:</label>
+          <textarea id="bio" name="bio" required><%= user.bio %></textarea>
+        </div>
+        <div>
+          <label for="age">Age:</label>
+          <input type="number" id="age" name="age" value="<%= user.age %>" required />
+        </div>
+        <div>
+          <label for="gender">Gender:</label>
+          <select id="gender" name="gender" required>
+            <option value="male" <%= user.gender === 'male' ? 'selected' : '' %>>Male</option>
+            <option value="female" <%= user.gender === 'female' ? 'selected' : '' %>>Female</option>
+            <option value="other" <%= user.gender === 'other' ? 'selected' : '' %>>Other</option>
+          </select>
+        </div>
+        <div>
+          <label for="photos">Profile Photos (JPG only):</label>
+          <input type="file" id="photos" name="photos" accept=".jpg,.jpeg" multiple />
+        </div>
+        <button type="submit">Save Changes</button>
+      </form>
+    </div>
+  </body>

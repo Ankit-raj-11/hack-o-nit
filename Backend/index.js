@@ -5,6 +5,7 @@ const mongoose = require("mongoose");
 const session = require("express-session");
 const { checkemail, checkpassword } = require("./middlewares/logincheck");
 const User = require("./models/user");
+const profileRoutes = require("./routes/profile"); // Add this line
 const port = process.env.PORT || 3000;
 
 // Middleware
@@ -14,6 +15,7 @@ app.use(
   session({ secret: "your_secret_key", resave: false, saveUninitialized: true })
 );
 app.use(express.static(path.join(__dirname, "../Frontend"))); // Ensure this line is present
+app.use(express.static(path.join(__dirname, "../public"))); // Ensure this line is present
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "../Frontend/pages"));
 
@@ -25,13 +27,26 @@ mongoose
   .then(() => console.log("MongoDB connected"))
   .catch((err) => console.error("MongoDB connection error:", err));
 
+// Middleware to attach user to request
+app.use(async (req, res, next) => {
+  if (req.session.userId) {
+    req.user = await User.findById(req.session.userId);
+  }
+  next();
+});
+
 // Routes
+app.use(profileRoutes); // Add this line
+
 app.get("/", (req, res) => {
   res.render("page0");
 });
 
 app.get("/home", (req, res) => {
-  res.render("home"); // Ensure this line is present
+  if (!req.user) {
+    return res.status(401).send("User not authenticated");
+  }
+  res.render("home", { user: req.user });
 });
 
 app.get("/notes", (req, res) => {

@@ -1,0 +1,23 @@
+<head>
+  <link rel="stylesheet" href="/styles/profile.css">
+</head>
+<body>
+    <div class="container">
+      <div class="profile-header">
+        <img
+          src="<%= user.photos && user.photos.length > 0 ? user.photos[0] : 'https://via.placeholder.com/100' %>"
+          alt="Profile Photo"
+        />
+        <h2><%= user.username %></h2>
+        <a href="/edit-profile" class="edit-btn">Edit Profile</a>
+      </div>
+      <div class="profile-details">
+        <p><strong>Bio:</strong> <%= user.bio %></p>
+        <p><strong>Age:</strong> <%= user.age %></p>
+        <p><strong>Gender:</strong> <%= user.gender %></p>
+        <p><strong>Email:</strong> <%= user.email %></p>
+        </div>
+        </div>
+      </div>
+    </div>
+  </body>
