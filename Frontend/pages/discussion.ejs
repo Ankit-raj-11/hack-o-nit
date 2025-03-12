@@ -3,10 +3,94 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Discussion room</title>
+    <title>Discussion Room</title>
+    <link rel="stylesheet" href="/styles/discussion.css" />
   </head>
   <body>
     <%- include('../partials/navbar') %>
-    <h1>this is discussion page</h1>
+    <h1>This is the discussion page</h1>
+    <div id="chat-container">
+      <div id="messages"></div>
+      <div id="chat-input-container">
+        <input id="message-input" type="text" placeholder="Type a message..." />
+        <button id="send-button">Send</button>
+      </div>
+    </div>
+    <div id="video-container">
+      <div id="local-video-wrapper">
+        <video id="local-video" autoplay muted></video>
+        <button id="toggle-video-button">Turn Off Video</button>
+      </div>
+      <div id="remote-video-wrapper">
+        <video id="remote-video" autoplay></video>
+      </div>
+    </div>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+      const socket = io();
+
+      // Chat functionality
+      const messages = document.getElementById("messages");
+      const messageInput = document.getElementById("message-input");
+      const sendButton = document.getElementById("send-button");
+
+      sendButton.addEventListener("click", () => {
+        const message = messageInput.value;
+        const username = "User"; // Replace with actual user name
+        socket.emit("send-message", {
+          roomId: "discussion-room",
+          message,
+          username,
+        });
+        messageInput.value = "";
+
+        // Append the message to the chat container
+        const messageElement = document.createElement("div");
+        messageElement.classList.add("message", "sent");
+        messageElement.textContent = `${username}: ${message}`;
+        messages.appendChild(messageElement);
+        messages.scrollTop = messages.scrollHeight;
+      });
+
+      socket.on("receive-message", ({ username, message }) => {
+        const messageElement = document.createElement("div");
+        messageElement.classList.add("message", "received");
+        messageElement.textContent = `${username}: ${message}`;
+        messages.appendChild(messageElement);
+        messages.scrollTop = messages.scrollHeight;
+      });
+
+      // Video call functionality
+      const localVideo = document.getElementById("local-video");
+      const remoteVideo = document.getElementById("remote-video");
+      const toggleVideoButton = document.getElementById("toggle-video-button");
+      let localStream;
+
+      navigator.mediaDevices
+        .getUserMedia({ video: true, audio: true })
+        .then((stream) => {
+          localStream = stream;
+          localVideo.srcObject = stream;
+          socket.emit("join-video-call", stream);
+        })
+        .catch((error) => {
+          console.error("Error accessing media devices.", error);
+        });
+
+      toggleVideoButton.addEventListener("click", () => {
+        const videoTrack = localStream.getVideoTracks()[0];
+        if (videoTrack.enabled) {
+          videoTrack.enabled = false;
+          toggleVideoButton.textContent = "Turn On Video";
+        } else {
+          videoTrack.enabled = true;
+          toggleVideoButton.textContent = "Turn Off Video";
+        }
+      });
+
+      socket.on("video-call", (stream) => {
+        remoteVideo.srcObject = stream;
+      });
+    </script>
   </body>
 </html>

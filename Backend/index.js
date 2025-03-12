@@ -3,9 +3,45 @@ const app = express();
 const path = require("path");
 const mongoose = require("mongoose");
 const session = require("express-session");
+const http = require("http");
+const socketIo = require("socket.io");
+const { attachUserToRequest } = require("./middlewares/attachUser");
 const { checkemail, checkpassword } = require("./middlewares/logincheck");
-const User = require("./models/user");
-const profileRoutes = require("./routes/profile"); // Add this line
+const User = require("./models/user"); // Ensure this line is present
+const profileRoutes = require("./routes/profile");
+const chatHandler = require("./socketHandlers/chatHandler");
+const videoHandler = require("./socketHandlers/videoHandler");
+
+//discussion room
+const server = http.createServer(app);
+const io = socketIo(server, {
+  cors: {
+    origin: "*",
+    methods: ["GET", "POST"],
+  },
+});
+
+io.on("connection", (socket) => {
+  console.log("New user connected:", socket.id);
+  chatHandler(io, socket);
+  videoHandler(io, socket);
+
+  // to one room
+  socket.to("others").emit("an event", { some: "data" });
+
+  // to multiple rooms
+  socket.to("room1").to("room2").emit("hello");
+
+  // or with an array
+  socket.to(["room1", "room2"]).emit("hello");
+
+  // a private message to another socket
+  socket.to(/* another socket id */).emit("hey");
+
+  // WARNING: `socket.to(socket.id).emit()` will NOT work
+  // Please use `io.to(socket.id).emit()` instead.
+});
+
 const port = process.env.PORT || 3000;
 
 // Middleware
@@ -14,29 +50,24 @@ app.use(express.urlencoded({ extended: true }));
 app.use(
   session({ secret: "your_secret_key", resave: false, saveUninitialized: true })
 );
-app.use(express.static(path.join(__dirname, "../Frontend"))); // Ensure this line is present
-app.use(express.static(path.join(__dirname, "../public"))); // Ensure this line is present
+app.use(express.static(path.join(__dirname, "../Frontend")));
+app.use(express.static(path.join(__dirname, "../public")));
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "../Frontend/pages"));
 
 // Mongoose connection
 mongoose
   .connect("mongodb://localhost:27017/gang", {
-    serverSelectionTimeoutMS: 30000, // Increase timeout to 30 seconds
+    serverSelectionTimeoutMS: 30000,
   })
   .then(() => console.log("MongoDB connected"))
   .catch((err) => console.error("MongoDB connection error:", err));
 
 // Middleware to attach user to request
-app.use(async (req, res, next) => {
-  if (req.session.userId) {
-    req.user = await User.findById(req.session.userId);
-  }
-  next();
-});
+app.use(attachUserToRequest);
 
 // Routes
-app.use(profileRoutes); // Add this line
+app.use(profileRoutes);
 
 app.get("/", (req, res) => {
   res.render("page0");
@@ -113,7 +144,7 @@ app.post("/login", checkemail, checkpassword, async (req, res) => {
 });
 
 // Start server
-const server = app.listen(port, () => {
+server.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);
 });
 

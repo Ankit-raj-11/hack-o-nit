@@ -17,11 +17,10 @@
     "express": "^4.21.2",
     "express-session": "^1.18.1",
     "mongoose": "^8.12.1",
-<<<<<<< HEAD
-    "multer": "^1.4.5-lts.1"
-=======
-    "nodemon": "^3.1.9"
->>>>>>> 0f42025f5d5cd61a9d0c9edadb53ca09a8389e6b
+    "multer": "^1.4.4-lts.1",
+    "nodemon": "^3.1.9",
+    "socket.io": "^4.8.1",
+    "socket.io-client": "^4.8.1"
   },
   "devDependencies": {
     "parcel": "^2.13.3"

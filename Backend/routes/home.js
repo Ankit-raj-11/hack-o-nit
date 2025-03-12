@@ -1,4 +1,6 @@
-// ...existing code...
+const express = require("express");
+const router = express.Router();
+
 router.get("/home", (req, res) => {
   const user = req.user; // Assuming user is attached to the request object
   if (!user) {
@@ -6,4 +8,5 @@ router.get("/home", (req, res) => {
   }
   res.render("home", { user });
 });
-// ...existing code...
+
+module.exports = router;
