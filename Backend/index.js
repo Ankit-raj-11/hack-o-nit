@@ -7,7 +7,8 @@ const http = require("http");
 const socketIo = require("socket.io");
 const { attachUserToRequest } = require("./middlewares/attachUser");
 const { checkemail, checkpassword } = require("./middlewares/logincheck");
-const User = require("./models/user"); // Ensure this line is present
+const User = require("./models/user");
+const Room = require("./models/room");
 const profileRoutes = require("./routes/profile");
 const chatHandler = require("./socketHandlers/chatHandler");
 const videoHandler = require("./socketHandlers/videoHandler");
@@ -22,7 +23,7 @@ const io = socketIo(server, {
 });
 
 io.on("connection", (socket) => {
-  console.log("New user connected:", socket.id);
+  // console.log("New user connected:", socket.id); // Comment out or remove this line
   chatHandler(io, socket);
   videoHandler(io, socket);
 
@@ -82,6 +83,11 @@ app.get("/home", (req, res) => {
 
 app.get("/notes", (req, res) => {
   res.render("notes");
+});
+
+app.get("/discussion0", async (req, res) => {
+  const rooms = await Room.find({});
+  res.render("discussion0", { rooms });
 });
 
 app.get("/discussion", (req, res) => {

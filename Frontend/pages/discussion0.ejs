@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Discussion Room</title>
+    <link rel="stylesheet" href="/styles/discussion.css" />
+  </head>
+  <body>
+    <%- include('../partials/navbar') %>
+    <h1>This is the discussion page</h1>
+    <div id="room-selection">
+      <button id="join-room-button">Join Room by id</button>
+      <button id="create-room-button">Create Room</button>
+    </div>
+    <div id="create-room-container" style="display: none">
+      <input id="new-room-name" type="text" placeholder="Enter room name" />
+      <button id="create-room-submit-button">Create</button>
+    </div>
+    <div id="created-rooms-container">
+      <h2>Created Rooms</h2>
+      <ul id="created-rooms-list">
+        <% rooms.forEach(room => { %>
+        <li data-room-id="<%= room.roomId %>">
+          <%= room.roomName %> (ID: <%= room.roomId %>)
+          <button onclick="joinRoom('<%= room.roomId %>')">Join Room</button>
+          <button onclick="deleteRoom('<%= room.roomId %>')">
+            Delete Room
+          </button>
+        </li>
+        <% }) %>
+      </ul>
+    </div>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+      const socket = io();
+      const createRoomButton = document.getElementById("create-room-button");
+      const createRoomContainer = document.getElementById(
+        "create-room-container"
+      );
+      const createRoomSubmitButton = document.getElementById(
+        "create-room-submit-button"
+      );
+      const newRoomNameInput = document.getElementById("new-room-name");
+      const createdRoomsList = document.getElementById("created-rooms-list");
+
+      createRoomButton.addEventListener("click", () => {
+        createRoomContainer.style.display = "block";
+      });
+
+      createRoomSubmitButton.addEventListener("click", () => {
+        const newRoomName = newRoomNameInput.value;
+        if (newRoomName) {
+          socket.emit("create-room", { roomName: newRoomName });
+          createRoomContainer.style.display = "none";
+          newRoomNameInput.value = "";
+        }
+      });
+
+      socket.on("room-created", ({ roomId, roomName }) => {
+        const listItem = document.createElement("li");
+        listItem.innerHTML = `${roomName} (ID: ${roomId}) <button onclick="joinRoom('${roomId}')">Join Room</button> <button onclick="deleteRoom('${roomId}')">Delete Room</button>`;
+        listItem.setAttribute("data-room-id", roomId);
+        createdRoomsList.appendChild(listItem);
+      });
+
+      socket.on("room-deleted", ({ roomId }) => {
+        const listItem = document.querySelector(`li[data-room-id="${roomId}"]`);
+        if (listItem) {
+          listItem.remove();
+        }
+      });
+
+      function joinRoom(roomId) {
+        const email = prompt("Enter your email to join the room:");
+        if (email) {
+          socket.emit("join-room", { roomId, email });
+          window.location.href = `/discussion?roomId=${roomId}`;
+        }
+      }
+
+      function deleteRoom(roomId) {
+        socket.emit("delete-room", { roomId });
+      }
+    </script>
+  </body>
+</html>

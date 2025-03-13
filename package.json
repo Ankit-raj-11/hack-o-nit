@@ -20,7 +20,8 @@
     "multer": "^1.4.4-lts.1",
     "nodemon": "^3.1.9",
     "socket.io": "^4.8.1",
-    "socket.io-client": "^4.8.1"
+    "socket.io-client": "^4.8.1",
+    "uuid": "^9.0.1"
   },
   "devDependencies": {
     "parcel": "^2.13.3"

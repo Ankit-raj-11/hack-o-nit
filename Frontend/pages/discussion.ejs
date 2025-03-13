@@ -8,7 +8,7 @@
   </head>
   <body>
     <%- include('../partials/navbar') %>
-    <h1>This is the discussion page</h1>
+    <h1>Welcome to the Discussion Room</h1>
     <div id="chat-container">
       <div id="messages"></div>
       <div id="chat-input-container">
@@ -28,50 +28,66 @@
     <script src="/socket.io/socket.io.js"></script>
     <script>
       const socket = io();
-
-      // Chat functionality
       const messages = document.getElementById("messages");
       const messageInput = document.getElementById("message-input");
       const sendButton = document.getElementById("send-button");
-
-      sendButton.addEventListener("click", () => {
-        const message = messageInput.value;
-        const username = "User"; // Replace with actual user name
-        socket.emit("send-message", {
-          roomId: "discussion-room",
-          message,
-          username,
-        });
-        messageInput.value = "";
-
-        // Append the message to the chat container
-        const messageElement = document.createElement("div");
-        messageElement.classList.add("message", "sent");
-        messageElement.textContent = `${username}: ${message}`;
-        messages.appendChild(messageElement);
-        messages.scrollTop = messages.scrollHeight;
-      });
-
-      socket.on("receive-message", ({ username, message }) => {
-        const messageElement = document.createElement("div");
-        messageElement.classList.add("message", "received");
-        messageElement.textContent = `${username}: ${message}`;
-        messages.appendChild(messageElement);
-        messages.scrollTop = messages.scrollHeight;
-      });
-
-      // Video call functionality
       const localVideo = document.getElementById("local-video");
       const remoteVideo = document.getElementById("remote-video");
       const toggleVideoButton = document.getElementById("toggle-video-button");
       let localStream;
+
+      const roomId = new URLSearchParams(window.location.search).get("roomId");
+
+      // Request chat history when the page loads
+      socket.emit("request-chat-history", { roomId });
+
+      sendButton.addEventListener("click", () => {
+        const message = messageInput.value;
+        const email = "User"; // Replace with actual user email
+        socket.emit("send-message", {
+          roomId,
+          message,
+          email,
+        });
+        messageInput.value = "";
+
+        const messageElement = document.createElement("div");
+        messageElement.classList.add("message", "sent");
+        messageElement.textContent = `${email}: ${message}`;
+        messages.appendChild(messageElement);
+        messages.scrollTop = messages.scrollHeight;
+      });
+
+      socket.on("receive-message", ({ email, message }) => {
+        const messageElement = document.createElement("div");
+        messageElement.classList.add("message", "received");
+        messageElement.textContent = `${email}: ${message}`;
+        messages.appendChild(messageElement);
+        messages.scrollTop = messages.scrollHeight;
+      });
+
+      socket.on("previous-messages", (previousMessages) => {
+        previousMessages.forEach(({ email, message }) => {
+          const messageElement = document.createElement("div");
+          messageElement.classList.add(
+            "message",
+            email === "User" ? "sent" : "received"
+          );
+          messageElement.textContent = `${email}: ${message}`;
+          messages.appendChild(messageElement);
+        });
+        messages.scrollTop = messages.scrollHeight;
+      });
 
       navigator.mediaDevices
         .getUserMedia({ video: true, audio: true })
         .then((stream) => {
           localStream = stream;
           localVideo.srcObject = stream;
-          socket.emit("join-video-call", stream);
+          socket.emit("join-video-call", {
+            roomId,
+            stream,
+          });
         })
         .catch((error) => {
           console.error("Error accessing media devices.", error);

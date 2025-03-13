@@ -88,3 +88,66 @@ video {
   border-radius: 5px;
   cursor: pointer;
 }
+
+#room-selection {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+#room-select {
+  margin-left: 10px;
+  padding: 5px;
+}
+
+#join-room-button,
+#create-room-button {
+  margin-left: 10px;
+  padding: 5px 10px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+#create-room-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+#create-room-container input {
+  margin-right: 10px;
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+#create-room-submit-button {
+  padding: 5px 10px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+#created-rooms-container {
+  margin-top: 20px;
+  text-align: center;
+}
+
+#created-rooms-list {
+  list-style-type: none;
+  padding: 0;
+}
+
+#created-rooms-list li {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  margin-bottom: 10px;
+}
