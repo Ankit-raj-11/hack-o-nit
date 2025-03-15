@@ -25,5 +25,13 @@
   },
   "devDependencies": {
     "parcel": "^2.13.3"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Ankit-raj-11/hack-o-nit.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Ankit-raj-11/hack-o-nit/issues"
+  },
+  "homepage": "https://github.com/Ankit-raj-11/hack-o-nit#readme"
 }
