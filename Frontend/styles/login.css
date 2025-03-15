@@ -26,20 +26,38 @@ body {
 
 .login-box {
     background-color: var(--sec-col);
-    border: 2px solid black;
+    /* border: 2px solid black; */
     width: 20vw;
     height: 50vh;
     display: flex;
     justify-content: center;
     flex-direction: column;
+    border-radius: 1.5rem;
+    position: relative;
+}
+
+.login-box::after, .login-box::before {
+    content: '';
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    top: 50%;
+    left: 50%;
+    translate: -50% -50%;
+    z-index: -1;
+    padding: 2px;
+    border-radius: 1.5rem;
+    animation: 3s linear spin infinite;
+    background-image: conic-gradient(from var(--angle), var(--prim-col), transparent 70%);
 }
 
 h2 {
+    box-sizing: border-box;
     font-family: 'Poppins', sans-serif;
     font-size: 3rem;
     text-align: center;
-    margin: auto;
-    margin: 0.5rem;
+    margin: 0.5rem auto;
+    color: var(black);
 }
 
 form {
@@ -61,31 +79,103 @@ form {
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
     gap: 10%;
     width: 80%;
     height: 100%;
 }
 
-.email .password {
+.email, .password {
     display: flex;
     flex-direction: column;
+    align-items: center;
     gap: 1rem;
     width: 100%;
+    height: 20%;
 }
 
 label {
-    text-align: left;
+    color: var(--prim-col);
 }
 
 input {
     width: 100%;
+    height: 50%;
+    padding: 2%;
+    border-radius: 0.5rem;
+    border: none;
+    background-color: var(--quad-col);
+    padding: 8px;
+    border: 1px solid black;
+}
+
+.btn-wrapper {
+    width: 100%;
+    height: 15%;
+    position: relative;
+    z-index: 1;
+    cursor: pointer;
 }
 
 button {
     width: 100%;
-    height: 15%;
+    height: 100%;
     background-color: var(--prim-col);
     color: white;
     border: none;
     border-radius: 0.5rem;
+    position: relative;
+    z-index: 1;
+    cursor: pointer;
 }
+
+input:focus {
+    scale: 1.05;
+}
+
+@property --angle {
+    syntax: "<angle>";
+    initial-value: 0deg;
+    inherits: false;
+}
+
+/* .btn-wrapper::after, .btn-wrapper::before {
+    content: '';
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    top: 50%;
+    left: 50%;
+    translate: -50% -50%;
+    z-index: -1;
+    padding: 2px;
+    border-radius: 10px;
+    animation: 3s linear spin infinite;
+    background-image: conic-gradient(from var(--angle), black, transparent 70%);
+} */
+
+/* .btn-wrapper::after:hover, .btn-wrapper::before:hover {
+    animation: 3s linear spin infinite;
+    background-image: conic-gradient(from var(--angle), black, transparent 70%);
+} */
+
+button:hover {
+    transition-property: transform background-color;
+    transition-duration: 100ms;
+    transition-timing-function: ease-out;
+    transform: scale(1.05);
+    background-color: #0d8a86;
+}
+
+button:active {
+    background-color: #0a6865;
+}
+
+@keyframes spin{
+    from{
+      --angle: 0deg;
+    }
+    to{
+      --angle: 360deg;
+    }
+  }
