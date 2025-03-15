@@ -10,15 +10,13 @@
   <body>
     <div class="container">
       <h2>Login</h2>
-      <span class="email">
-        Email:
-      </span>
-      <input type="email" placeholder="Enter Email">
-      <span class="password">
-        Password:
-      </span>
-      <input type="password" placeholder="Enter Password">
-      <button type="submit">Submit</button>
+      <form action="/login" method="POST">
+        <span class="email"> Email: </span>
+        <input type="email" name="email" placeholder="Enter Email" />
+        <span class="password"> Password: </span>
+        <input type="password" name="password" placeholder="Enter Password" />
+        <button type="submit">Submit</button>
+      </form>
     </div>
   </body>
 </html>
