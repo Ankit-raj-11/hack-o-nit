@@ -16,4 +16,11 @@ header {
 
 header ul {
     display: flex;
+    gap: 10vh;   
+}
+
+li{
+    margin-left: 20vh;
+    font-family: 'Poppins', sans-serif;
+    text-decoration: none;
 }
