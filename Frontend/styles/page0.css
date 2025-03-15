@@ -65,6 +65,7 @@ button {
     padding: 1rem;
     margin: 0;
     cursor: pointer;
+    box-shadow: var(--widget-shadow);
 }
 
 .wrapper1::after, .wrapper1::before {

@@ -128,6 +128,7 @@ button {
     position: relative;
     z-index: 1;
     cursor: pointer;
+    box-shadow: var(--widget-shadow);
 }
 
 input:focus {
