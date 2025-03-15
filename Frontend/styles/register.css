@@ -10,3 +10,65 @@
 /* Font to use */
 @import url('https://fonts.googleapis.com/css2?family=Martel+Sans:wght@200;300;400;600;700;800;900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
 
+* {
+    padding: 0;
+    margin: 0;
+}
+
+body {
+    background-color: var(--third-col);
+    font-family: 'Poppins', sans-serif;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+form {
+    width: 60vw;
+    height: 50vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.wrapper {
+    height: 100%;
+    width: 100%;
+    background-color: var(--sec-col);
+    border-radius: 1.5rem;
+    box-shadow: var(--widget-shadow);
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+
+.wrapper::after, .wrapper::before {
+    content: '';
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    top: 50%;
+    left: 50%;
+    translate: -50% -50%;
+    z-index: -1;
+    padding: 3px;
+    border-radius: 1.5rem;
+    animation: 3s linear spin infinite;
+    background-image: conic-gradient(from var(--angle), var(--prim-col), transparent 70%);
+}
+
+@property --angle {
+    syntax: "<angle>";
+    initial-value: 0deg;
+    inherits: false;
+}
+
+@keyframes spin{
+    from{
+      --angle: 0deg;
+    }
+    to{
+      --angle: 360deg;
+    }
+  }
