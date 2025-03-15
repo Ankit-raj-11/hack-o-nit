@@ -14,13 +14,25 @@ header {
     width: 100vw;
 }
 
-header ul {
+header ul{
     display: flex;
+    justify-content: center;
+    align-content: center;
+    align-items: center;
     gap: 10vh;   
 }
 
-li{
-    margin-left: 20vh;
+a{
     font-family: 'Poppins', sans-serif;
     text-decoration: none;
+    color: #ffffff;
+    margin-bottom: 4vh;
+}
+
+li{
+    list-style-type: none;
+}
+
+#img.avatar{
+    align-self: flex-end;
 }
