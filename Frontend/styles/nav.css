@@ -16,8 +16,16 @@ header {
     left: 0;
 }
 
+h1 {
+    display: inline;
+}
+
+.wrapper, .main-nav {
+    height: 100%;
+}
+
 header ul{
-    height: 0;
+    height: 100%;
     width: 100vw;   
     display: flex;
     justify-content: center;
