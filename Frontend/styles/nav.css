@@ -12,27 +12,46 @@ header {
     background-color: var(--prim-col);
     height: 9vh;
     width: 100vw;
+    top: 0;
+    left: 0;
 }
 
 header ul{
+    height: 0;
+    width: 100vw;   
     display: flex;
     justify-content: center;
-    align-content: center;
     align-items: center;
-    gap: 10vh;   
+    gap: 7vw;   
 }
 
 a{
     font-family: 'Poppins', sans-serif;
     text-decoration: none;
     color: #ffffff;
-    margin-bottom: 4vh;
+    
 }
 
 li{
     list-style-type: none;
 }
 
-#img.avatar{
-    align-self: flex-end;
+.right-item{
+    height:30px ;
+    width: 30px;
+    position: absolute;
+    right: 30px;
+    top: 3%;
+}
+
+@media (max-width: 768px) {
+    header ul {
+        gap: 5vw;
+    }
+}
+
+@media (max-width: 480px) {
+    header ul {
+        gap: 3vw;
+    }
 }
